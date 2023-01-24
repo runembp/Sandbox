@@ -1,21 +1,35 @@
-﻿using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
+﻿using System.Net;
+using DTL.Entities;
+using Simple.OData.Client;
 
-var organizationService = ConnectToCrm();
+var client = WebApiLogin();
 
-var whoAmI = (WhoAmIResponse)organizationService.Execute(new WhoAmIRequest());
+var contactRelations = await client.For<ContactRelationEntity>().FindEntriesAsync();
 
-Console.ReadKey();
+Console.ReadLine();
 
-static IOrganizationService ConnectToCrm()
+static IODataClient WebApiLogin()
 {
-    var crmOrganizationUrl = Environment.GetEnvironmentVariable("CRM_ORGANIZATIONSERVICE_URL");
+    const string baseAddress = "http://crm.dev1.vlpadr.net/vellivcrm/";
+    const string apiUrl = "api/data/v8.2";
+    
     var crmDomain = Environment.GetEnvironmentVariable("DOMAIN");
     var crmUsername = Environment.GetEnvironmentVariable("CRM_USERNAME");
     var crmPassword = Environment.GetEnvironmentVariable("CRM_PASSWORD");
-    // crmOrganizationUrl = "http://crm.test1.vlpadr.net/Velliv/XRMServices/2011/Organization.svc";
 
-    var connectionString = $"AuthType=AD;Domain={crmDomain};Url={crmOrganizationUrl};Username={crmUsername};Password={crmPassword}";
-    return new CrmServiceClient(connectionString);
+    var httpHandler = new HttpClientHandler
+    {
+        Credentials = new NetworkCredential(crmUsername, crmPassword, crmDomain),
+    };
+
+    var httpClient = new HttpClient(httpHandler)
+    {
+        BaseAddress = new Uri(baseAddress)
+    };
+
+    var odataSettings = new ODataClientSettings(httpClient, new Uri(apiUrl, UriKind.Relative));
+    var directoryInfo = new DirectoryInfo("../../../");
+    odataSettings.MetadataDocument = File.ReadAllText(directoryInfo + "metadata.xml");
+    
+    return new ODataClient(odataSettings);
 }

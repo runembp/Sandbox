@@ -1,27 +1,41 @@
 ﻿using System;
-using System.Linq;
-using DTL.Entities;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace SandboxFramework
 {
     internal static class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var organizationService = ConnectToCrm();
-            var contactRelationGuid = new Guid("{DA029880-9386-ED11-AABB-9BB85E851AD8}");
-            // {DA029880-9386-ED11-AABB-9BB85E851AD8}
+            var httpClient = WebApiLogin();
+            var apiUrl = "api/data/v8.2/accounts";
+
+            var request = await httpClient.GetStringAsync(apiUrl);
             
-            var contactRelationEntity = organizationService.Retrieve(ContactRelationEntity.LogicalName, contactRelationGuid, new ColumnSet());
-
-            contactRelationEntity[ContactRelationEntity.FieldAccountAttRiskReport] = false;
-            organizationService.Update(contactRelationEntity);
-
         }
 
+        private static HttpClient WebApiLogin()
+        {
+            var crmOrganizationUrl = Environment.GetEnvironmentVariable("CRM_ORGANIZATIONSERVICE_URL");
+            var crmDomain = Environment.GetEnvironmentVariable("DOMAIN");
+            var crmUsername = Environment.GetEnvironmentVariable("CRM_USERNAME");
+            var crmPassword = Environment.GetEnvironmentVariable("CRM_PASSWORD");
+
+            var httpHandler = new HttpClientHandler
+            {
+                Credentials = new NetworkCredential(crmUsername, crmPassword, crmDomain),
+            };
+
+            var httpClient = new HttpClient(httpHandler);
+            httpClient.BaseAddress = new Uri("http://crm.dev1.vlpadr.net/vellivcrm/");
+
+            return httpClient;
+        }
+        
         private static IOrganizationService ConnectToCrm()
         {
             var crmOrganizationUrl = Environment.GetEnvironmentVariable("CRM_ORGANIZATIONSERVICE_URL");

@@ -1,8 +1,12 @@
-﻿namespace DTL.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DTL.Entities
 {
-    public static class ContactRelationEntity
+    [Table(PluralLogicalName)]
+    public class ContactRelationEntity
     {
         public const string LogicalName = "new_contactrelations";
+        public const string PluralLogicalName = "new_contactrelationses";
 
         public const string FieldAccount = "new_accountnameid";
         public const string FieldAccountCeo = "new_accountceo";
@@ -13,5 +17,8 @@
         public const string FieldAccountPayrollAdministrator = "new_accountpayrolladministrator";
         public const string FieldAccountHrDirectorManager = "new_accounthrdirectorhrmanager";
         public const string FieldAccountAttRiskReport = "new_accountattriskreport";
+
+        [Column(FieldAccountCfo)]
+        public bool AccountCfo { get; set; }
     }
 }
