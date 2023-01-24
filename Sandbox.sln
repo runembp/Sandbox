@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commentor", "Commentor\Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTL", "DTL\DTL.csproj", "{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductAtom", "..\ProductAtom\ProductAtom\ProductAtom.csproj", "{CE33875C-0D58-4D0D-B9F6-F3B6C3BD7EDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductAtom", "ProductAtom\ProductAtom.csproj", "{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +32,9 @@ Global
 		{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE33875C-0D58-4D0D-B9F6-F3B6C3BD7EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE33875C-0D58-4D0D-B9F6-F3B6C3BD7EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE33875C-0D58-4D0D-B9F6-F3B6C3BD7EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE33875C-0D58-4D0D-B9F6-F3B6C3BD7EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
