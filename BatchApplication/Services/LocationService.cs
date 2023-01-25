@@ -1,23 +1,17 @@
 ﻿namespace BatchApplication.Services;
 
-public class LocationService
+public static class LocationService
 {
-    private const string ComFolder = @"\crm\com";
-    private const string JobCompletedFolder = @"\crm\com\JobCompletedFolder";
-    private readonly string? _environmentFileshare;
+    private const string EnvironmentFileshare = @"\\smb-app.dev1.vlpadr.net\crm\com\";
+    private const string JobCompletedFolder = @"JobCompletedFolder\";
     
-    private LocationService()
+    public static string GetBatchJobLocation(string batchJobIdentifier)
     {
-        _environmentFileshare = Environment.GetEnvironmentVariable("FILESHARE");
-    }
-    
-    public string GetBatchJobLocation(string batchJobIdentifier)
-    {
-        return _environmentFileshare + ComFolder + batchJobIdentifier;
+        return EnvironmentFileshare + batchJobIdentifier;
     }
 
-    public string GetJobCompletedFolder(string batchJobIdentifier)
+    public static string GetJobCompletedFolder(string batchJobIdentifier)
     {
-        return _environmentFileshare + JobCompletedFolder + batchJobIdentifier;
+        return EnvironmentFileshare + JobCompletedFolder + batchJobIdentifier;
     }
 }

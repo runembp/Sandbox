@@ -1,67 +1,48 @@
-﻿using System.Globalization;
-using BatchApplication.Models;
-using CsvHelper;
-using CsvHelper.Configuration;
+﻿using System.Reflection;
+using BatchApplication.ApplicationConstants;
 
-var batchId = args[0];
-
-var csvFile = "snoop";
-
-using var reader = new StreamReader(csvFile);
-var a = new CsvConfiguration(CultureInfo.InvariantCulture)
-{
-    Delimiter = ";"
-};
-
-using var csv = new CsvReader(reader, a);
-
-var records = new List<ProductAtomDTO>();
-var records2 = csv.GetRecords<ProductAtomDTO>().ToList();
-
-for (int i = 0; i < 10000; i++)
-{
-    records.AddRange(records2);
-}
-
-var policyNumbers = records.Select(x => x.PolicyNumber);
+var batchName = ApplicationConstants.BatchJobs[int.Parse(args[0])];
+var assembly = Assembly.GetExecutingAssembly();
+var type = assembly.GetTypes().First(x => x.Name == batchName);
+Activator.CreateInstance(type);
 
 // Get guids from policynumbers using otdataclinet (dictionary)
-
-await Parallel.ForEachAsync(records, async (record, cancellationToken) =>
-{
-    await ProcessRecord(record);
-});
-
-async Task ProcessRecord(ProductAtomDTO productAtomDto)
-{
-    var _ = productAtomDto.Action switch
-    {
-        "DELETE" => ProcessDeleteAction(productAtomDto),
-        "UPDATE" => ProcessUpdateAction(productAtomDto),
-        "INSERT" => ProcessInsertAction(productAtomDto),
-        _ => throw new NotImplementedException()
-    };
-}
-
-Task ProcessInsertAction(ProductAtomDTO productAtomDto1)
-{
-    throw new NotImplementedException();
-}
-
-Task ProcessUpdateAction(ProductAtomDTO productAtomDto)
-{
-    // Is this a create ? 
-    // Call ODataClient with policynumber to get guid. 
-    // if guid is null then its a Create action
-
-    throw new NotImplementedException();
-}
-
-Task ProcessDeleteAction(ProductAtomDTO productAtomDto)
-{
-    // find guid in collection of guids
-
-
-    throw new NotImplementedException();
-}
-
+//
+// await Parallel.ForEachAsync(records, async (record, cancellationToken) =>
+// {
+//     await ProcessRecord(record);
+// });
+//
+// async Task ProcessRecord(ProductAtomDTO productAtomDto)
+// {
+//     var _ = productAtomDto.Action switch
+//     {
+//         "DELETE" => ProcessDeleteAction(productAtomDto),
+//         "UPDATE" => ProcessUpdateAction(productAtomDto),
+//         "INSERT" => ProcessInsertAction(productAtomDto),
+//         _ => throw new NotImplementedException()
+//     };
+// }
+//
+// Task ProcessInsertAction(ProductAtomDTO productAtomDto1)
+// {
+//     throw new NotImplementedException();
+// }
+//
+// Task ProcessUpdateAction(ProductAtomDTO productAtomDto)
+// {
+//     // Is this a create ? 
+//     // Call ODataClient with policynumber to get guid. 
+//     // if guid is null then its a Create action
+//
+//     throw new NotImplementedException();
+// }
+//
+// Task ProcessDeleteAction(ProductAtomDTO productAtomDto)
+// {
+//     // find guid in collection of guids
+//
+//
+//     throw new NotImplementedException();
+// }
+//

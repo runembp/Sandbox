@@ -3,8 +3,12 @@ using DTL.Entities;
 using Simple.OData.Client;
 
 var client = WebApiLogin();
+var annotations = new ODataFeedAnnotations();
 
-var contactRelations = await client.For<ContactRelationEntity>().FindEntriesAsync();
+var contactRelations = await client
+    .For<ContactRelationEntity>()
+    .Count()
+    .FindEntriesAsync(annotations);
 
 Console.ReadLine();
 

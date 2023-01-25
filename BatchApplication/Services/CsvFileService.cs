@@ -1,9 +1,18 @@
-﻿namespace BatchApplication.Services;
+﻿using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
 
-public class CsvFileService
+namespace BatchApplication.Services;
+
+public static class CsvFileService 
 {
-    private CsvFileService()
+    public static CsvReader GetCsvReader(StreamReader streamReader) 
     {
-        
+        var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            Delimiter = ";"
+        };
+
+        return new CsvReader(streamReader, csvConfiguration);
     }
 }
