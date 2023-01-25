@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commentor", "Commentor\Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTL", "DTL\DTL.csproj", "{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductAtom", "ProductAtom\ProductAtom.csproj", "{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatchApplication", "BatchApplication\BatchApplication.csproj", "{ED39F64D-340D-453C-9D5B-E48D1D7FC2D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

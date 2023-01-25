@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
+using BatchApplication.Models;
 using CsvHelper;
 using CsvHelper.Configuration;
-using ProductAtom.Models;
 
-const string csvFile = "PRODUCTATOM.CSV";
+var batchId = args[0];
+
+var csvFile = "snoop";
 
 using var reader = new StreamReader(csvFile);
 var a = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -21,7 +23,7 @@ for (int i = 0; i < 10000; i++)
     records.AddRange(records2);
 }
 
-var ploicyNumbers = records.Select(x => x.PolicyNumber);
+var policyNumbers = records.Select(x => x.PolicyNumber);
 
 // Get guids from policynumbers using otdataclinet (dictionary)
 

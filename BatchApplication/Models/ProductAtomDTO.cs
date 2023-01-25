@@ -1,7 +1,4 @@
-﻿using CsvHelper.Configuration.Attributes;
-
-namespace ProductAtom.Models;
-
+﻿namespace BatchApplication.Models;
 
 public class ProductAtomDTO
 {
