@@ -48,6 +48,7 @@
         <Compile Include="DTO\OrderSheetFields.cs" />
         <Compile Include="Entities\AccountEntity.cs" />
         <Compile Include="Entities\ContactRelationEntity.cs" />
+        <Compile Include="Entities\PolicyEntity.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

@@ -4,6 +4,7 @@ using BatchApplication.Services;
 using CsvHelper;
 using CsvHelper.Configuration;
 using DTL.Entities;
+using Simple.OData.Client;
 
 namespace BatchApplication.BatchJobs;
 
@@ -26,27 +27,36 @@ public class ProductAtomBatchJob
             {
                 Delimiter = ";"
             };
-            
+
             using var streamReader = new StreamReader(csvFile);
             using var csvReader = new CsvReader(streamReader, csvConfiguration);
-            
+
             var productAtoms = csvReader.GetRecords<ProductAtomDTO>().ToList();
-            
+
             ProcessProductAtoms(productAtoms);
-            //TODO MoveToCompletedFolder
+            //TODO MoveToCompletedFolder();
         }
     }
 
     private static async void ProcessProductAtoms(IEnumerable<ProductAtomDTO> productAtoms)
     {
         var policyNumbers = productAtoms.Select(x => x.PolicyNumber);
+        var policyNumberGuids = new Dictionary<string, Guid>();
 
         var client = ConnectionService.GetODataClient();
-        
-        var contactRelations = await client
-            .For<ContactRelationEntity>()
-            .FindEntriesAsync();
-        
-        Console.WriteLine("test");
+
+        var filter = new ODataExpression<PolicyEntity>(x => x.PolicyNumber == policyNumbers.First());
+
+        foreach (var policyNumber in policyNumbers)
+        {
+            filter = filter || new ODataExpression<PolicyEntity>(x => x.PolicyNumber == policyNumber);
+        }
+
+        var query = client.For<PolicyEntity>();
+        foreach (var policyNumber in policyNumbers)
+        {
+            query.Filter(x => x.PolicyNumber == policyNumber);
+        }
+        var contactRelations = await query.FindEntriesAsync();
     }
 }
