@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using Microsoft.Xrm.Tooling.Connector;
 
 namespace SandboxFramework
@@ -11,11 +12,13 @@ namespace SandboxFramework
     {
         public static async Task Main(string[] args)
         {
-            var httpClient = WebApiLogin();
-            var apiUrl = "api/data/v8.2/accounts";
+            var service = ConnectToCrm();
 
-            var request = await httpClient.GetStringAsync(apiUrl);
+            var thing = service.Retrieve("new_waitinginfo", new Guid("e96d60a7-236b-ed11-aa9f-83c91b559ced"), new ColumnSet());
+
             
+            
+            service.Update(thing);
         }
 
         private static HttpClient WebApiLogin()

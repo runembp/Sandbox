@@ -1,15 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DTL.Entities
 {
     [Table(LogicalName)]
     public class PolicyEntity
     {
-        public const string LogicalName = "new_policy";
+        private const string LogicalName = "new_policy";
 
-        public const string FieldPolicyNumber = "new_policynumber";
+        private const string FieldPolicyNumber = "new_policynumber";
+        private const string FieldPolicyId = "new_policyid";
+        
+        [Column(FieldPolicyId)]
+        public Guid Id { get; set; }
         
         [Column(FieldPolicyNumber)] 
         public string PolicyNumber { get; set; }
+        
     }
 }
