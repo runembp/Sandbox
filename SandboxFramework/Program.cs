@@ -1,54 +1,49 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Xrm.Sdk;
+using System.Linq;
+using DTL.Entities;
 using Microsoft.Xrm.Sdk.Query;
-using Microsoft.Xrm.Tooling.Connector;
+using SandboxFramework.Entities;
+using SandboxFramework.Tools;
 
 namespace SandboxFramework
 {
     internal static class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var service = ConnectToCrm();
-
-            var thing = service.Retrieve("new_waitinginfo", new Guid("e96d60a7-236b-ed11-aa9f-83c91b559ced"), new ColumnSet());
-
+            var foodFolkGuid = new Guid("{C762E3E9-98DD-DE11-940D-005056B155F7}");
             
-            
-            service.Update(thing);
+            GetAccountsWithDailyContactToPoolingAccount(foodFolkGuid);
         }
 
-        private static HttpClient WebApiLogin()
+        private static void GetAccountsWithDailyContactToPoolingAccount(Guid foodFolkGuid)
         {
-            var crmOrganizationUrl = Environment.GetEnvironmentVariable("CRM_ORGANIZATIONSERVICE_URL");
-            var crmDomain = Environment.GetEnvironmentVariable("DOMAIN");
-            var crmUsername = Environment.GetEnvironmentVariable("CRM_USERNAME");
-            var crmPassword = Environment.GetEnvironmentVariable("CRM_PASSWORD");
+            var service = OrganizationService.GetOrganizationService();
+            var accountGuid = new Guid("c762e3e9-98dd-de11-940d-005056b155f7");
 
-            var httpHandler = new HttpClientHandler
-            {
-                Credentials = new NetworkCredential(crmUsername, crmPassword, crmDomain),
-            };
+            var policeIkraftGuid = new Guid("76171472-6ad0-de11-9119-005056b155f7");
+            var policePraemiebaerende = new Guid("3ca54805-13da-e611-80fd-005056ba6546");
+            const string companyWildcardQuery = "%firma%";
+            const int levelRammeAftale = 100000001;
+            
+            var query = new QueryExpression("account");
+            query.Distinct = true;
 
-            var httpClient = new HttpClient(httpHandler);
-            httpClient.BaseAddress = new Uri("http://crm.dev1.vlpadr.net/vellivcrm/");
+            query.ColumnSet.AddColumns("name", "telephone1", "new_cvrnumber", "address1_postalcode", "address1_city", "new_pensionscheme", "new_opportunities", "new_leads", "new_concernaccount", "accountnumber", "new_unformatedcvr", "new_nlpaccountsegmentid", "new_dailycontactaccountid", "ownerid", "accountid");
+            query.AddOrder("name", OrderType.Ascending);
+            query.Criteria.AddCondition("new_contractaccountnameid", ConditionOperator.Equal, accountGuid);
+            query.Criteria.AddCondition("new_poolingnetwork", ConditionOperator.Null);
 
-            return httpClient;
-        }
-        
-        private static IOrganizationService ConnectToCrm()
-        {
-            var crmOrganizationUrl = Environment.GetEnvironmentVariable("CRM_ORGANIZATIONSERVICE_URL");
-            var crmDomain = Environment.GetEnvironmentVariable("DOMAIN");
-            var crmUsername = Environment.GetEnvironmentVariable("CRM_USERNAME");
-            var crmPassword = Environment.GetEnvironmentVariable("CRM_PASSWORD");
-            crmOrganizationUrl = "http://crm.dev1.vlpadr.net/Vellivcrm/XRMServices/2011/Organization.svc";
+            var policyLink = query.AddLink("new_policy", "accountid", "new_employerid");
+            policyLink.LinkCriteria.AddCondition("new_statusid", ConditionOperator.In, policeIkraftGuid, policePraemiebaerende);
+            policyLink.LinkCriteria.AddCondition("new_incassocodeidname", ConditionOperator.Like, companyWildcardQuery);
 
-            var connectionString = $"AuthType=AD;Domain={crmDomain};Url={crmOrganizationUrl};Username={crmUsername};Password={crmPassword}";
-            return new CrmServiceClient(connectionString);
+            var accountLink = query.AddLink("account", "new_contractaccountnameid", "accountid");
+            var poolingLink = accountLink.AddLink("new_pooling", "accountid", "new_account");
+            poolingLink.LinkCriteria.AddCondition("new_level", ConditionOperator.Equal, levelRammeAftale);
+            poolingLink.LinkCriteria.AddCondition("new_enddate", ConditionOperator.Null);
+
+            var daughterAccounts = service.RetrieveMultiple(query).Entities;
         }
     }
 }

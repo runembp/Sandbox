@@ -1,13 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 
-namespace DTL.Entities
+namespace SandboxFramework.Entities
 {
-    [Table(PluralLogicalName)]
-    public class ContactRelationEntity
+    [EntityLogicalName(EntityLogicalName)]
+    public class ContactRelationEntity : BaseEntity
     {
+        public ContactRelationEntity() 
+        {
+            LogicalName = typeof(ContactRelationEntity).GetCustomAttribute<EntityLogicalNameAttribute>().LogicalName;
+        }
+
         private const string PluralLogicalName = "new_contactrelationses";
-        
-        public const string LogicalName = "new_contactrelations";
+
+        public new const string EntityLogicalName = "new_contactrelations";
 
         public const string FieldAccount = "new_accountnameid";
         public const string FieldAccountCeo = "new_accountceo";
@@ -18,11 +26,15 @@ namespace DTL.Entities
         public const string FieldAccountPayrollAdministrator = "new_accountpayrolladministrator";
         public const string FieldAccountHrDirectorManager = "new_accounthrdirectorhrmanager";
         public const string FieldAccountAttRiskReport = "new_accountattriskreport";
+        public const string FieldContactRelationEmail = "new_contactrelationemail";
 
-        [Column(FieldAccountCfo)]
-        public bool AccountCfo { get; set; }
-        
-        [Column("new_contactrelationemail")]
-        public ContactRelationEntity Email { get; set; }
+        [Column(FieldAccountCfo)] public bool AccountCfo { get; set; }
+
+        [AttributeLogicalName(FieldContactRelationEmail)]
+        public EntityReference ContactRelationForEmail 
+        {
+            get => Get<EntityReference>();
+            set => Set(value);
+        }
     }
 }
