@@ -11,10 +11,12 @@ namespace SandboxFramework.Entities
     [Table(EntityLogicalName)]
     public class CoveragePolicyEntity : BaseEntity
     {
-        public CoveragePolicyEntity()
-        {
-            LogicalName = typeof(CoveragePolicyEntity).GetCustomAttribute<EntityLogicalNameAttribute>().LogicalName;
-        }
+        // public CoveragePolicyEntity()
+        // {
+        //     var thing = typeof(CoveragePolicyEntity).GetCustomAttribute<EntityLogicalNameAttribute>();
+        //     
+        //     LogicalName = typeof(CoveragePolicyEntity).GetCustomAttribute<EntityLogicalNameAttribute>().LogicalName;
+        // }
         
         public new const string EntityLogicalName = "new_coverage_policy";
 

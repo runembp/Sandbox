@@ -1,13 +1,17 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Xrm.Sdk;
 
 namespace SandboxFramework.Entities
 {
     [Table(EntityLogicalName)]
-    public class PolicyEntity
+    public class PolicyEntity : Entity
     {
-        public const string EntityLogicalName = "new_policy";
+        public PolicyEntity() : base(EntityLogicalName)
+        {
+        }
 
+        private const string EntityLogicalName = "new_policy";
         private const string FieldPolicyNumber = "new_policynumber";
         private const string FieldPolicyId = "new_policyid";
         public const string FieldEmployerId = "new_employerid";

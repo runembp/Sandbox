@@ -3,17 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SandboxFramework.Entities
 {
-    [Table(LogicalName)]
+    [Table(EntityLogicalName)]
     public class DailyJobEntity 
     {
-        
-        
-        private const string LogicalName = "new_dailyjob";
+        public const string EntityLogicalName = "new_dailyjob";
         private const string FieldId = "new_dailyjobid";
 
         private const string FieldErrorText = "new_errortext";
         private const string FieldData = "new_data";
-        private const string FieldBatchIdentifier = "new_identifier";
+        public const string FieldBatchIdentifier = "new_identifier";
 
         [Column(FieldId)]
         public Guid Id { get; set; } = Guid.NewGuid();

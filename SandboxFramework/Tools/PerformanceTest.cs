@@ -18,7 +18,6 @@ public static class PerformanceTest
     {
         Console.WriteLine($"Started 10x Performance test with ({batchSize}) actions on {amountOfEntities}");
 
-
         var list = new List<Tuple<double, double>>();
 
         for (var methodCounter = 0; methodCounter < 10; methodCounter++)
