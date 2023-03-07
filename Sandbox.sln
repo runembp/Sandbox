@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commentor", "Commentor\Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTL", "DTL\DTL.csproj", "{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Batch - Core", "Batch - Core\Batch - Core.csproj", "{81D6B35F-2296-46A8-AAC3-03FD7B31DBAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Batch - Framework", "Batch - Framework\Batch - Framework.csproj", "{AE481E61-24AE-468E-87E0-D8BD681E1CC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42580AFC-349E-4E67-9DC0-0C1FA52FE20E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81D6B35F-2296-46A8-AAC3-03FD7B31DBAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81D6B35F-2296-46A8-AAC3-03FD7B31DBAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81D6B35F-2296-46A8-AAC3-03FD7B31DBAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81D6B35F-2296-46A8-AAC3-03FD7B31DBAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE481E61-24AE-468E-87E0-D8BD681E1CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE481E61-24AE-468E-87E0-D8BD681E1CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE481E61-24AE-468E-87E0-D8BD681E1CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE481E61-24AE-468E-87E0-D8BD681E1CC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

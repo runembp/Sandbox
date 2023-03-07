@@ -12,12 +12,17 @@ namespace SandboxFramework
             
             var organizationService = OrganizationService.GetOrganizationService();
 
-            var policy = new PolicyEntity
+            var notesQuery = new QueryExpression("annotation")
             {
-                PolicyNumber = "SomePolicyNumber"
+                ColumnSet = new ColumnSet("subject", "mimetype", "filename", "documentbody"),
+                Criteria = new FilterExpression
+                    {
+                    FilterOperator = LogicalOperator.And,
+                    Conditions = { new ConditionExpression("objectid", ConditionOperator.Equal, sourceEntityId) }
+                   }
             };
-
-            var result = organizationService.Create(policy);
+            
+            var notesList = organizationService.RetrieveMultiple(notesQuery);
         }
     }
 }
