@@ -182,6 +182,7 @@
         <Compile Include="Entities\PoolingEntity.cs" />
         <Compile Include="Entities\ProductEntity.cs" />
         <Compile Include="Entities\ConceptEntity.cs" />
+        <Compile Include="Entities\StatusEntity.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Tools\Deletion.cs" />
