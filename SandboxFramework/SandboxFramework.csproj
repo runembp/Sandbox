@@ -203,6 +203,7 @@
         <Compile Include="Tools\Deletion.cs" />
         <Compile Include="Tools\Extensions.cs" />
         <Compile Include="Tools\OrganizationService.cs" />
+        <Compile Include="Tools\ScanBatch.cs" />
         <Compile Include="Tools\TypeConverters.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -210,10 +211,7 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="DTL\DTL.csproj">
-        <Project>{501d919f-0c60-4ad7-9d25-67c4ed77af3e}</Project>
-        <Name>DTL</Name>
-      </ProjectReference>
+      <Content Include="Tools\BatchText.txt" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

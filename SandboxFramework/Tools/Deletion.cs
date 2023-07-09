@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using DTL.Entities;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -30,22 +28,24 @@ namespace SandboxFramework.Tools
                 MaxDegreeOfParallelism = threads
             };
 
-            var dailyJobs = new List<DailyJobEntity>();
-            var dailyJobQuery = new QueryExpression(DailyJobEntity.EntityLogicalName);
-            dailyJobQuery.Criteria.AddCondition(DailyJobEntity.FieldBatchIdentifier, ConditionOperator.Equal, batchIdentifier);
+            var dailyJobs = new List<Entity>();
+            var dailyJobQuery = new QueryExpression("new_dailyjob");
+            // dailyJobQuery.Criteria.AddCondition("new_identifier", ConditionOperator.Equal, batchIdentifier);
 
             var dailyJobsResult = organizationService.RetrieveMultiple(dailyJobQuery);
-            dailyJobs.AddRange(dailyJobsResult.Entities.Select(entity => entity.ToEntity<DailyJobEntity>()));
+            dailyJobs.AddRange(dailyJobsResult.Entities);
 
             while (dailyJobsResult.MoreRecords)
             {
                 dailyJobQuery.PageInfo.PageNumber++;
                 dailyJobQuery.PageInfo.PagingCookie = dailyJobsResult.PagingCookie;
                 dailyJobsResult = organizationService.RetrieveMultiple(dailyJobQuery);
-                dailyJobs.AddRange(dailyJobsResult.Entities.Select(entity => entity.ToEntity<DailyJobEntity>()));
+                dailyJobs.AddRange(dailyJobsResult.Entities);
             }
 
-            Console.WriteLine($"Deleting {dailyJobs.Count} daily jobs from batch job: {batchIdentifier}");
+            var totalDailyJobs = dailyJobs.Count;
+            
+            Console.WriteLine($"Deleting {totalDailyJobs} daily jobs from batch job: {batchIdentifier}");
 
             var sw = Stopwatch.StartNew();
 
@@ -75,10 +75,8 @@ namespace SandboxFramework.Tools
                 });
 
 
-                Console.WriteLine($"Deleted {dailyJobsResult.Entities.Count} daily jobs after {sw.Elapsed.TotalSeconds} seconds");
+                Console.WriteLine($"Deleted {totalDailyJobs} daily jobs after {sw.Elapsed.TotalSeconds} seconds");
             } while (dailyJobsResult.MoreRecords);
-
-            Console.WriteLine($"Done in Elapsed: {sw.Elapsed.TotalSeconds}");
         }
     }
 }

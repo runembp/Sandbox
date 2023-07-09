@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandboxFramework", "SandboxFramework\SandboxFramework.csproj", "{7E3C9522-A5E5-402B-9F38-F7A52C18F6EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTL", "SandboxFramework\DTL\DTL.csproj", "{501D919F-0C60-4AD7-9D25-67C4ED77AF3E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,9 +12,5 @@ Global
 		{7E3C9522-A5E5-402B-9F38-F7A52C18F6EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E3C9522-A5E5-402B-9F38-F7A52C18F6EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E3C9522-A5E5-402B-9F38-F7A52C18F6EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{501D919F-0C60-4AD7-9D25-67C4ED77AF3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{501D919F-0C60-4AD7-9D25-67C4ED77AF3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{501D919F-0C60-4AD7-9D25-67C4ED77AF3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{501D919F-0C60-4AD7-9D25-67C4ED77AF3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
