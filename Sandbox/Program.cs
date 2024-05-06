@@ -1,0 +1,1 @@
+﻿Console.WriteLine(".NET 8 - Woo!");
