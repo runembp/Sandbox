@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
@@ -11,26 +10,33 @@ namespace SandboxFramework.Tools
 {
     public static class Deletion
     {
-        public static void Cleanup(string batchIdentifier)
+        private const int FieldThreads = 4;
+        private const int FieldChunkSize = 500;
+
+        public static void Cleanup(string batchIdentifier = null)
         {
             ServicePointManager.DefaultConnectionLimit = 65000;
             ServicePointManager.Expect100Continue = false;
             ServicePointManager.UseNagleAlgorithm = false;
             System.Threading.ThreadPool.SetMinThreads(100, 100);
 
-            var organizationService = OrganizationService.GetOrganizationService();
+            var organizationService = GetOrganizationService();
 
-            const int threads = 4;
-            const int chunkSize = 500;
+            GetDailyJobs(batchIdentifier, organizationService);
+        }
 
-            var parallelOptions = new ParallelOptions
+        private static void GetDailyJobs(string batchIdentifier, IOrganizationService organizationService)
+        {
+            var dailyJobs = new List<Entity>();
+            var dailyJobQuery = new QueryExpression("new_dailyjob")
             {
-                MaxDegreeOfParallelism = threads
+                ColumnSet = new ColumnSet(false)
             };
 
-            var dailyJobs = new List<Entity>();
-            var dailyJobQuery = new QueryExpression("new_dailyjob");
-            // dailyJobQuery.Criteria.AddCondition("new_identifier", ConditionOperator.Equal, batchIdentifier);
+            if (!string.IsNullOrWhiteSpace(batchIdentifier))
+            {
+                dailyJobQuery.Criteria.AddCondition("new_identifier", ConditionOperator.Equal, batchIdentifier);
+            }
 
             var dailyJobsResult = organizationService.RetrieveMultiple(dailyJobQuery);
             dailyJobs.AddRange(dailyJobsResult.Entities);
@@ -41,42 +47,59 @@ namespace SandboxFramework.Tools
                 dailyJobQuery.PageInfo.PagingCookie = dailyJobsResult.PagingCookie;
                 dailyJobsResult = organizationService.RetrieveMultiple(dailyJobQuery);
                 dailyJobs.AddRange(dailyJobsResult.Entities);
+
+                if (dailyJobs.Count <= 25_000)
+                {
+                    continue;
+                }
+
+                var deleteMessage = batchIdentifier == null 
+                    ? string.Format("Deleting {0} daily jobs.", dailyJobs.Count)
+                    : string.Format("Deleting {0} daily jobs for batch identifier {1}.", dailyJobs.Count, batchIdentifier);
+                
+                Console.WriteLine(deleteMessage);
+                
+                DeleteDailyJobs(dailyJobs);
+                dailyJobs.Clear();
             }
 
-            var totalDailyJobs = dailyJobs.Count;
-            
-            Console.WriteLine($"Deleting {totalDailyJobs} daily jobs from batch job: {batchIdentifier}");
+            DeleteDailyJobs(dailyJobs);
+        }
 
-            var sw = Stopwatch.StartNew();
-
-            do
+        private static void DeleteDailyJobs(IEnumerable<Entity> dailyJobs)
+        {
+            var parallelOptions = new ParallelOptions
             {
-                Parallel.ForEach(dailyJobs.ChunkBy(chunkSize), parallelOptions, chunk =>
+                MaxDegreeOfParallelism = FieldThreads
+            };
+
+            Parallel.ForEach(dailyJobs.ChunkBy(FieldChunkSize), parallelOptions, chunk =>
+            {
+                var localOrganizationService = GetOrganizationService();
+
+                var executeMultiple = new ExecuteMultipleRequest
                 {
-                    var localOrganizationService = OrganizationService.GetOrganizationService();
-
-                    var executeMultiple = new ExecuteMultipleRequest
+                    Settings = new ExecuteMultipleSettings
                     {
-                        Settings = new ExecuteMultipleSettings
-                        {
-                            ContinueOnError = true,
-                            ReturnResponses = false
-                        },
-                        Requests = new OrganizationRequestCollection()
-                    };
+                        ContinueOnError = true,
+                        ReturnResponses = false
+                    },
+                    Requests = new OrganizationRequestCollection()
+                };
 
-                    foreach (var dailyJob in chunk)
-                    {
-                        executeMultiple.Requests.Add(new DeleteRequest { Target = dailyJob.ToEntityReference() });
-                    }
+                foreach (var dailyJob in chunk)
+                {
+                    executeMultiple.Requests.Add(new DeleteRequest { Target = dailyJob.ToEntityReference() });
+                }
 
-                    localOrganizationService.Execute(executeMultiple);
-                    executeMultiple.Requests.Clear();
-                });
+                localOrganizationService.Execute(executeMultiple);
+                executeMultiple.Requests.Clear();
+            });
+        }
 
-
-                Console.WriteLine($"Deleted {totalDailyJobs} daily jobs after {sw.Elapsed.TotalSeconds} seconds");
-            } while (dailyJobsResult.MoreRecords);
+        private static IOrganizationService GetOrganizationService()
+        {
+            return OrganizationService.GetOrganizationServiceInTest();
         }
     }
 }
