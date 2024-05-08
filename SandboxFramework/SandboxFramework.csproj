@@ -210,6 +210,7 @@
         <Compile Include="Tools\Deletion.cs" />
         <Compile Include="Tools\EarlyBoundClassGenerator.cs" />
         <Compile Include="Tools\Extensions.cs" />
+        <Compile Include="Tools\FieldCounter.cs" />
         <Compile Include="Tools\FieldUtility.cs" />
         <Compile Include="Tools\OrganizationService.cs" />
         <Compile Include="Tools\ProcessDeletion.cs" />

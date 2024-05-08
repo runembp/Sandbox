@@ -90,7 +90,7 @@ namespace SandboxFramework.Tools
             }
         }
 
-        private static string DataTypeConverter(string attributeType)
+        public static string DataTypeConverter(string attributeType)
         {
             switch (attributeType)
             {
